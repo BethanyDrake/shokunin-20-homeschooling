@@ -4,10 +4,7 @@ const { setupMaster } = require("cluster")
 const sum = list => list.reduce((i, curr) => i+curr, 0)
 
 const isFair = (division) => {
-  const sums = division.map(list => sum(list))
-  const fairTotal = sums[0]
-
-  return sums.every((total) => total === fairTotal)
+  return division.every((total) => total === division[0])
 }
 
 const r_isDivisible = (alreadyAssigned, remaining) => {
@@ -16,20 +13,37 @@ const r_isDivisible = (alreadyAssigned, remaining) => {
     return isFair(alreadyAssigned)
   }
 
+  //if the greatest assignment is greater that the smallest assignment plus the remainders, there's no solution
+  sortDescending(alreadyAssigned)
+  const sumRemaining =sum(remaining)
+  if (alreadyAssigned[0] > alreadyAssigned[2] +  sumRemaining) {
+    return false;
+  }
+
+  //if they're currently equal, and the remainder doesn't add to a multiple of three, there's no solution
+  if (alreadyAssigned[0] == alreadyAssigned[2] && sumRemaining %3!=0) {
+    return false;
+  }
+
+
   const next = remaining[0]
 
-  const option1 = [[...alreadyAssigned[0], next], [...alreadyAssigned[1]], [...alreadyAssigned[2]]]
-  const option2 = [[...alreadyAssigned[0]], [...alreadyAssigned[1], next], [...alreadyAssigned[2]]]
-  const option3 = [[...alreadyAssigned[0]], [...alreadyAssigned[1]], [...alreadyAssigned[2], next]]
+  const option1 = [alreadyAssigned[0]+next, alreadyAssigned[1], alreadyAssigned[2]]
+  const option2 = [alreadyAssigned[0], alreadyAssigned[1]+next, alreadyAssigned[2]]
+  const option3 =[alreadyAssigned[0], alreadyAssigned[1], alreadyAssigned[2] +next]
 
   const newRemaining = [...remaining].slice(1)
   return r_isDivisible(option1, newRemaining) || r_isDivisible(option2, newRemaining) || r_isDivisible(option3, newRemaining)
 }
 
+const sortDescending = (list) => {
+  list.sort((a,b) => b-a)
+}
 
 const isDivisible = (tasks) => {
   if (!tasks) return "yes"
-  return r_isDivisible([[], [], []], tasks) ? "yes" : "no"
+  sortDescending(tasks)
+  return r_isDivisible([0,0,0], tasks) ? "yes" : "no"
 }
 
 module.exports = {isDivisible, sum, isFair, r_isDivisible};
