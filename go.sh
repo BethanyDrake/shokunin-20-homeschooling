@@ -1,2 +1,2 @@
-echo yes
+node main.js
 
