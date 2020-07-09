@@ -29,8 +29,7 @@ const r_isDivisible = (alreadyAssigned, remaining) => {
 
 const isDivisible = (tasks) => {
   if (!tasks) return "yes"
-  if (tasks.length % 3 === 0) return "yes"
-  return "no"
+  return r_isDivisible([[], [], []], tasks) ? "yes" : "no"
 }
 
 module.exports = {isDivisible, sum, isFair, r_isDivisible};
