@@ -1,4 +1,4 @@
-const isDivisible = require('./isDivisible.js');
+const {isDivisible} = require('./isDivisible.js');
 var readline = require('readline');
 
 var rl = readline.createInterface({
