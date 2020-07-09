@@ -9,3 +9,8 @@ const test = (func, expectedOutput) => {
 }
 
 test(isDivisible, "yes");
+
+test(() => isDivisible([]), "yes")
+test(() => isDivisible([1]), "no")
+test(() => isDivisible([1, 1]), "no")
+test(() => isDivisible([1, 1, 1]), "yes")
