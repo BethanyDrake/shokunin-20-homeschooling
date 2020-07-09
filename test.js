@@ -26,6 +26,10 @@ test(() => r_isDivisible([[1], [1], [1]], []), true)
 test(() => r_isDivisible([[1], [2], [1]], []), false)
 test(() => r_isDivisible([[1, 1], [2], [1, 1]], []), true)
 
+console.log("\nr_isDivisible simple case")
+test(() => r_isDivisible([[], [], []], [1,1,1]), true)
+
+
 console.log("\nall tasks same size")
 test(() => isDivisible([]), "yes")
 test(() => isDivisible([1]), "no")

@@ -16,7 +16,14 @@ const r_isDivisible = (alreadyAssigned, remaining) => {
     return isFair(alreadyAssigned)
   }
 
-  return false
+  const next = remaining[0]
+
+  const option1 = [[...alreadyAssigned[0], next], [...alreadyAssigned[1]], [...alreadyAssigned[2]]]
+  const option2 = [[...alreadyAssigned[0]], [...alreadyAssigned[1], next], [...alreadyAssigned[2]]]
+  const option3 = [[...alreadyAssigned[0]], [...alreadyAssigned[1]], [...alreadyAssigned[2], next]]
+
+  const newRemaining = [...remaining].slice(1)
+  return r_isDivisible(option1, newRemaining) || r_isDivisible(option2, newRemaining) || r_isDivisible(option3, newRemaining)
 }
 
 
