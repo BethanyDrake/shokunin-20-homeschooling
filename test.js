@@ -1,6 +1,11 @@
 const isDivisible = require('./isDivisible');
 
-const output = isDivisible()
-if (output === "yes") {
-  console.log("pass")
-} else console.log("fail: " + output)
+const test = (func, expectedOutput) => {
+  const output = func()
+  if (output === expectedOutput) {
+    console.log("pass")
+  } else console.log("fail: " + output)
+
+}
+
+test(isDivisible, "yes");
