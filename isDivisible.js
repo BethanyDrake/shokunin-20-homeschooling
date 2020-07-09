@@ -1,13 +1,15 @@
-const { isDeepStrictEqual } = require("util")
-const { setupMaster } = require("cluster")
-
 const sum = list => list.reduce((i, curr) => i+curr, 0)
 
 const isFair = (division) => {
   return division.every((total) => total === division[0])
 }
 
-const r_isDivisible = (alreadyAssigned, remaining) => {
+const r_isDivisible = (alreadyAssigned, remaining, alreadySearched={}) => {
+  const key = ""+ alreadyAssigned + remaining;
+
+  //skip situations we've already explored, or mark this situation as explored.
+  if (alreadySearched[key]) return false;
+  alreadySearched[key] = true
 
   if (remaining.length == 0) {
     return isFair(alreadyAssigned)
@@ -24,21 +26,17 @@ const r_isDivisible = (alreadyAssigned, remaining) => {
     return false;
   }
 
-
   const next = remaining[0]
 
   const option1 = [alreadyAssigned[0]+next, alreadyAssigned[1], alreadyAssigned[2]]
   const option2 = [alreadyAssigned[0], alreadyAssigned[1]+next, alreadyAssigned[2]]
   const option3 =[alreadyAssigned[0], alreadyAssigned[1], alreadyAssigned[2] +next]
 
-  //we can skip equivalent options
   let options = [option1, option2, option3]
   sortDescending(options)
-  if (options[2] == options[1]) options = options.slice(0,1)
-  if (options[0] == options[1]) options = options.slice(1)
 
   const newRemaining = [...remaining].slice(1)
-  return options.some((option) => r_isDivisible(option, newRemaining))
+  return options.some((option) => r_isDivisible(option, newRemaining, alreadySearched))
 
 }
 

@@ -61,4 +61,4 @@ const createArray = (number, size) => {
 test(() => isDivisible(createArray(1, 14)), "no")
 test(() => isDivisible(createArray(2, 21)), "yes")
 test(() => isDivisible(createArray(4, 20)), "no")
-// test(() => isDivisible(createArray(3, 20)), "no") //too slow
+test(() => isDivisible(createArray(3, 20)), "no")
