@@ -9,7 +9,6 @@ const test = (func, expectedOutput) => {
   } else {
     console.log("fail: " + output)
   }
-
 }
 
 const isValidSolution = (tasks, solution) => {
@@ -37,7 +36,6 @@ const test_r_IsDivisible = (remaining, expected) => {
       console.log("!!!! FAIL: expected no solution, found: " + formatSolution(output.solution))
     }
   }
-
 }
 
 console.log("\nsum")

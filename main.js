@@ -12,5 +12,3 @@ rl.question(">>Enter tasks: ", answer => {
   console.log(isDivisible(parsedInput))
   rl.close();
 });
-
-
