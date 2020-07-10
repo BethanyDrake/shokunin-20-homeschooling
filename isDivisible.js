@@ -44,6 +44,46 @@ const hasNoTasksLeftToAssign = (remainingTasks) => {
   return remainingTasks.length == 0
 }
 
+
+const getOptions = (currentDivisions, next) => {
+  const option1 = [[...currentDivisions[0], next], [...currentDivisions[1]], [...currentDivisions[2]]]
+  const option2 = [[...currentDivisions[0]], [...currentDivisions[1], next], [...currentDivisions[2]]]
+  const option3 = [[...currentDivisions[0]], [...currentDivisions[1]], [...currentDivisions[2], next]]
+
+  return [option1, option2, option3]
+}
+
+const exploreAllOptions = (remaining, currentDivisions, alreadySearched) => {
+  const next = remaining[0]
+  const options = getOptions(currentDivisions, next)
+  const newRemaining = [...remaining].slice(1)
+
+  while (options.length > 0) {
+    const option = options.pop()
+    const result = r_isDivisible(newRemaining, option, alreadySearched)
+    if (result.isDivisible) {
+      return result
+    }
+  }
+
+  return null
+}
+
+const earlyExit = (remaining, currentTotals) => {
+  //early exit: if the greatest assignment is greater that the smallest assignment plus the remainders, there's no solution
+ const sumRemaining = sum(remaining)
+ if (currentTotals[0] > currentTotals[2] + sumRemaining) {
+   return NO_SOLUTION
+ }
+
+ //early exit: if they're currently equal, and the remainder doesn't add to a multiple of three, there's no solution
+ if (currentTotals[0] == currentTotals[2] && sumRemaining % 3 != 0) {
+   return NO_SOLUTION
+ }
+
+ return null
+}
+
 const r_isDivisible = (remaining, currentDivisions = [[], [], []], alreadySearched = {}) => {
   const currentTotals = currentDivisions.map(division => sum(division))
   sortDescending(currentTotals)
@@ -58,36 +98,9 @@ const r_isDivisible = (remaining, currentDivisions = [[], [], []], alreadySearch
     return handleBaseCase( currentTotals, currentDivisions)
   }
 
-  //early exit: if the greatest assignment is greater that the smallest assignment plus the remainders, there's no solution
-  const sumRemaining = sum(remaining)
-  if (currentTotals[0] > currentTotals[2] + sumRemaining) {
-    return NO_SOLUTION
-  }
-
-  //early exit: if they're currently equal, and the remainder doesn't add to a multiple of three, there's no solution
-  if (currentTotals[0] == currentTotals[2] && sumRemaining % 3 != 0) {
-    return NO_SOLUTION
-  }
-
-  const next = remaining[0]
-
-  const option1 = [[...currentDivisions[0], next], [...currentDivisions[1]], [...currentDivisions[2]]]
-  const option2 = [[...currentDivisions[0]], [...currentDivisions[1], next], [...currentDivisions[2]]]
-  const option3 = [[...currentDivisions[0]], [...currentDivisions[1]], [...currentDivisions[2], next]]
-
-  let options = [option1, option2, option3]
-
-  const newRemaining = [...remaining].slice(1)
-  while (options.length > 0) {
-    let option = options.pop()
-    const result = r_isDivisible(newRemaining, option, alreadySearched)
-    if (result.isDivisible) {
-      return result
-    }
-  }
-
-  return NO_SOLUTION
-
+  return earlyExit(remaining, currentTotals)
+    || exploreAllOptions(remaining, currentDivisions, alreadySearched)
+    || NO_SOLUTION
 }
 
 
