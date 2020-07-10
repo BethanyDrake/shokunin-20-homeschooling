@@ -1,4 +1,4 @@
-const {isDivisible} = require('./isDivisible.js');
+const { isDivisible } = require('./isDivisible.js');
 var readline = require('readline');
 
 var rl = readline.createInterface({
@@ -8,7 +8,8 @@ var rl = readline.createInterface({
 });
 
 rl.question(">>Enter tasks: ", answer => {
-  console.log(isDivisible(answer.split(" ").map(i => parseInt(i))))
+  const parsedInput = answer.split(" ").map(i => parseInt(i))
+  console.log(isDivisible(parsedInput))
   rl.close();
 });
 
